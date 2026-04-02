@@ -1,63 +1,58 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useTransition } from "react";
+import triggerEvent from "@/actions/trigger-event";
 
 export default function Home() {
+  const [isPending, startTransition] = useTransition();
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  const handleEventTrigger = () => {
+    setMessage({ text: "", type: "" });
+
+    startTransition(async () => {
+      try {
+        await triggerEvent();
+        setMessage({
+          text: "Event triggered! Check your Inngest dashboard.",
+          type: "success",
+        });
+      } catch {
+        setMessage({
+          text: "Failed to trigger event. Please try again.",
+          type: "error",
+        });
+      }
+    });
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex flex-col flex-1 items-center justify-center min-h-screen bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center py-32 px-16 bg-white dark:bg-black gap-8">
+        <h1 className="text-3xl font-bold text-center tracking-tight text-zinc-800 dark:text-zinc-100">
+          Welcome to the Next.js + Inngest Starter Template!
+        </h1>
+
+        <div className="w-full flex flex-col items-center mt-8">
+          <button
+            onClick={handleEventTrigger}
+            disabled={isPending}
+            className={`flex w-full sm:w-auto items-center justify-center rounded-md border border-zinc-200 bg-white px-8 py-3 text-sm font-semibold text-zinc-800 shadow-sm transition-all
+              ${isPending ? "opacity-70 cursor-not-allowed" : "hover:bg-zinc-100 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:hover:bg-zinc-700 dark:focus:ring-blue-800"} 
+              dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {isPending ? "Triggering..." : "Trigger Event"}
+          </button>
+
+          <div className="h-6 mt-4 flex justify-center">
+            {message.text && (
+              <p
+                className={`text-sm font-medium animate-in fade-in zoom-in duration-300 ${message.type === "success" ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
+              >
+                {message.text}
+              </p>
+            )}
+          </div>
         </div>
       </main>
     </div>
