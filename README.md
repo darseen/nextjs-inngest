@@ -1,6 +1,12 @@
 # Next.js + Inngest Starter Template
 
+<div align="center">
+
 A robust, production-ready starter template for building Next.js applications with reliable background jobs, scheduled tasks, and step functions powered by [Inngest](https://www.inngest.com/).
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/nextjs-with-inngest?referralCode=InkF11&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+</div>
 
 ## Project Structure
 
